@@ -225,6 +225,17 @@ public interface FlippingConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+			keyName = "exportCurrentSlotsToFile",
+			name = "Export current GE slots",
+			description = "Write current Grand Exchange slot state to a local JSON file",
+			section = autoSaveSection,
+			position = 4
+	)
+	default boolean exportCurrentSlotsToFile() {
+		return false;
+	}
+
 	@ConfigSection(
 			name = "Custom Recipes",
 			description = "Settings for custom recipe search",

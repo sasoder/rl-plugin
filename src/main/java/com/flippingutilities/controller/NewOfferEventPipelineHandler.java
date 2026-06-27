@@ -3,6 +3,7 @@ package com.flippingutilities.controller;
 import com.flippingutilities.model.FlippingItem;
 import com.flippingutilities.model.OfferEvent;
 import com.flippingutilities.ui.widgets.SlotActivityTimer;
+import com.flippingutilities.utilities.MerchIntentMatcher;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.WorldType;
 import net.runelite.api.events.GrandExchangeOfferChanged;
@@ -135,6 +136,7 @@ public class NewOfferEventPipelineHandler {
             }
             if (newOfferEvent.isStartOfOffer()) {
                 newOfferEvent.setTradeStartedAt(Instant.now());
+                MerchIntentMatcher.tag(newOfferEvent, plugin.getCurrentlyLoggedInAccount());
             }
 
             return Optional.empty();
@@ -159,6 +161,9 @@ public class NewOfferEventPipelineHandler {
 
         newOfferEvent.setTicksSinceFirstOffer(lastOfferEvent);
         newOfferEvent.setTradeStartedAt(lastOfferEvent.getTradeStartedAt());
+        newOfferEvent.setMerchIntentId(lastOfferEvent.getMerchIntentId());
+        newOfferEvent.setMerchStrategy(lastOfferEvent.getMerchStrategy());
+        newOfferEvent.setMerchNote(lastOfferEvent.getMerchNote());
         lastOfferEventForEachSlot.put(newOfferEvent.getSlot(), newOfferEvent);
         slotActivityTimers.get(newOfferEvent.getSlot()).setCurrentOffer(newOfferEvent);
         return newOfferEvent.getCurrentQuantityInTrade() ==0? Optional.empty() : Optional.of(newOfferEvent);

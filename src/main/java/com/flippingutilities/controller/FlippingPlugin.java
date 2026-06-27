@@ -297,6 +297,9 @@ public class FlippingPlugin extends Plugin {
     @Override
     protected void shutDown() {
         log.debug("shutdown running!");
+        if (slotStateSenderJob != null) {
+            slotStateSenderJob.exportSlotsToFile(true);
+        }
         if (generalRepeatingTasks != null) {
             generalRepeatingTasks.cancel(true);
             generalRepeatingTasks = null;
@@ -325,6 +328,9 @@ public class FlippingPlugin extends Plugin {
             slotTimersTask = null;
         }
         dataHandler.storeData();
+        if (slotStateSenderJob != null) {
+            slotStateSenderJob.exportSlotsToFile(true);
+        }
         if (cacheUpdaterJob != null) cacheUpdaterJob.stop();
         if (wikiDataFetcherJob != null) wikiDataFetcherJob.stop();
         if (slotStateSenderJob != null) slotStateSenderJob.stop();
@@ -421,6 +427,7 @@ public class FlippingPlugin extends Plugin {
         }
         apiAuthHandler.checkRsn(displayName);
         slotStateSenderJob.justLoggedIn = true;
+        slotStateSenderJob.exportSlotsToFile(true);
     }
 
     public void handleLogout() {
@@ -479,6 +486,9 @@ public class FlippingPlugin extends Plugin {
     @Subscribe
     public void onGrandExchangeOfferChanged(GrandExchangeOfferChanged offerChangedEvent) {
         newOfferEventPipelineHandler.onGrandExchangeOfferChanged(offerChangedEvent);
+        if (slotStateSenderJob != null) {
+            slotStateSenderJob.exportSlotsToFile(false);
+        }
     }
 
     public List<FlippingItem> getItemsForCurrentView() {
@@ -1124,9 +1134,19 @@ public class FlippingPlugin extends Plugin {
 
         handleSlotTimersConfigChange(event);
         handleAutoSaveConfigChange(event);
+        handleCurrentSlotsExportConfigChange(event);
 
         statPanel.rebuildItemsDisplay(viewItemsForCurrentView());
         flippingPanel.rebuild(viewItemsForCurrentView());
+    }
+
+    private void handleCurrentSlotsExportConfigChange(ConfigChanged event) {
+        if (!event.getKey().equals("exportCurrentSlotsToFile") || !config.exportCurrentSlotsToFile()) {
+            return;
+        }
+        if (slotStateSenderJob != null) {
+            slotStateSenderJob.exportSlotsToFile(true);
+        }
     }
 
     private void handleSlotTimersConfigChange(ConfigChanged event) {

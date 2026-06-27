@@ -23,6 +23,10 @@ public class SlotState {
     private Integer offerPrice;
     private Integer filledPrice;
     private Date offerCreationTime;
+    private Boolean beforeLogin;
+    private String merchIntentId;
+    private String merchStrategy;
+    private String merchNote;
 
     public static SlotState fromOfferEvent(OfferEvent offerEvent) {
         return new SlotState(
@@ -35,7 +39,11 @@ public class SlotState {
                 offerEvent.getTotalQuantityInTrade(),
                 offerEvent.getListedPrice(),
                 offerEvent.getSpent(),
-                offerEvent.getTradeStartedAt() != null? Date.from(offerEvent.getTradeStartedAt()): null
+                offerEvent.getTradeStartedAt() != null? Date.from(offerEvent.getTradeStartedAt()): null,
+                offerEvent.isBeforeLogin(),
+                offerEvent.getMerchIntentId(),
+                offerEvent.getMerchStrategy(),
+                offerEvent.getMerchNote()
         );
     }
 
@@ -61,8 +69,8 @@ public class SlotState {
     public static SlotState createEmptySlot(int index) {
         SlotState emptySlot = new SlotState();
         emptySlot.index = index;
+        emptySlot.state = "EMPTY";
+        emptySlot.beforeLogin = false;
         return emptySlot;
     }
 }
-
-

@@ -1,8 +1,10 @@
 package com.flippingutilities.jobs;
 
 import com.flippingutilities.controller.FlippingPlugin;
+import com.flippingutilities.model.AccountData;
 import com.flippingutilities.model.OfferEvent;
 import com.flippingutilities.ui.widgets.SlotActivityTimer;
+import com.flippingutilities.utilities.CurrentSlotsFileExporter;
 import com.flippingutilities.utilities.SlotState;
 import com.flippingutilities.utilities.AccountSlotsUpdate;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class SlotSenderJob {
     OkHttpClient httpClient;
     Future slotStateSenderTask;
     AccountSlotsUpdate previouslySentSlotUpdate;
+    CurrentSlotsFileExporter currentSlotsFileExporter;
     List<Consumer<Integer>> subscribers = new ArrayList<>();
     public static int PERIOD = 10; //seconds
     public boolean justLoggedIn = false;
@@ -31,6 +34,7 @@ public class SlotSenderJob {
         this.plugin = plugin;
         this.httpClient = httpClient;
         this.executor = Executors.newSingleThreadScheduledExecutor();
+        this.currentSlotsFileExporter = new CurrentSlotsFileExporter(plugin.gson);
     }
 
     public void subscribe(Consumer<Integer> subscriber) {
@@ -50,12 +54,20 @@ public class SlotSenderJob {
     }
 
     private void sendSlots() {
-        if (!plugin.getApiAuthHandler().canCommunicateWithApi(plugin.getCurrentlyLoggedInAccount())) {
+        if (plugin.getCurrentlyLoggedInAccount() == null) {
             return;
         }
 
         List<SlotState> currentSlotStates = this.getCurrentSlots();
+        persistCurrentSlots(currentSlotStates);
         AccountSlotsUpdate accountSlotsUpdate = new AccountSlotsUpdate(plugin.getCurrentlyLoggedInAccount(), currentSlotStates);
+        exportSlotsToFile(accountSlotsUpdate, true);
+
+        if (!plugin.getApiAuthHandler().canCommunicateWithApi(plugin.getCurrentlyLoggedInAccount())) {
+            justLoggedIn = false;
+            return;
+        }
+
         if (accountSlotsUpdate.equals(this.previouslySentSlotUpdate) && !justLoggedIn) {
             log.debug("no updates to slots since the last time I sent them, not sending any requests.");
             subscribers.forEach(subscriber -> subscriber.accept(0));
@@ -75,6 +87,31 @@ public class SlotSenderJob {
 
                     }
                 });
+    }
+
+    public void exportSlotsToFile(boolean force) {
+        if (plugin.getCurrentlyLoggedInAccount() == null) {
+            return;
+        }
+
+        List<SlotState> currentSlotStates = this.getCurrentSlots();
+        persistCurrentSlots(currentSlotStates);
+        AccountSlotsUpdate accountSlotsUpdate = new AccountSlotsUpdate(plugin.getCurrentlyLoggedInAccount(), currentSlotStates);
+        exportSlotsToFile(accountSlotsUpdate, force);
+    }
+
+    private void persistCurrentSlots(List<SlotState> currentSlotStates) {
+        AccountData accountData = plugin.getDataHandler().getAccountData(plugin.getCurrentlyLoggedInAccount());
+        if (accountData != null) {
+            accountData.setCurrentSlots(currentSlotStates);
+        }
+    }
+
+    private void exportSlotsToFile(AccountSlotsUpdate accountSlotsUpdate, boolean force) {
+        if (!plugin.getConfig().exportCurrentSlotsToFile()) {
+            return;
+        }
+        currentSlotsFileExporter.export(accountSlotsUpdate, force);
     }
 
     /**
