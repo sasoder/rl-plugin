@@ -126,7 +126,8 @@ public class CurrentSlotsFileExporter {
                 slot.getBeforeLogin() == null ? false : slot.getBeforeLogin(),
                 slot.getMerchIntentId(),
                 slot.getMerchStrategy(),
-                slot.getMerchNote()
+                slot.getMerchNote(),
+                slot.getMerchHardExitAt()
         );
     }
 

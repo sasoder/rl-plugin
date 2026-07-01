@@ -39,7 +39,8 @@ public class CurrentSlotsFileExporterTest {
                 false,
                 "intent-1",
                 "active-margin",
-                "test note"
+                "test note",
+                "2026-06-23T18:00:00Z"
         );
         SlotState empty = SlotState.createEmptySlot(1);
 
@@ -63,6 +64,7 @@ public class CurrentSlotsFileExporterTest {
         assertEquals("intent-1", slot0.get("merchIntentId").getAsString());
         assertEquals("active-margin", slot0.get("merchStrategy").getAsString());
         assertEquals("test note", slot0.get("merchNote").getAsString());
+        assertEquals("2026-06-23T18:00:00Z", slot0.get("merchHardExitAt").getAsString());
 
         JsonObject slot1 = root.getAsJsonArray("slots").get(1).getAsJsonObject();
         assertEquals(1, slot1.get("slot").getAsInt());

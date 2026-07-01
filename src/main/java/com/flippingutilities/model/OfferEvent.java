@@ -84,6 +84,7 @@ public class OfferEvent
 	private String merchIntentId;
 	private String merchStrategy;
 	private String merchNote;
+	private String merchHardExitAt;
 	/**
 	 * a offer always belongs to a flipping item. Every flipping item was flipped by an account and only one account and
 	 * has a flipped by attribute. So, the reason this attribute is here is because during the process of creating
@@ -223,6 +224,7 @@ public class OfferEvent
 				merchIntentId,
 				merchStrategy,
 				merchNote,
+				merchHardExitAt,
 				madeBy,
 				itemName,
 				listedPrice,
@@ -309,6 +311,7 @@ public class OfferEvent
 			null,
 			null,
 			null,
+			null,
 			offer.getPrice(),
 			offer.getSpent());
 	}
@@ -344,6 +347,7 @@ public class OfferEvent
 				1,
 				null,
 				false,
+				null,
 				null,
 				null,
 				null,

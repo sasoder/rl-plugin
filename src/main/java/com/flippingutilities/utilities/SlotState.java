@@ -27,6 +27,7 @@ public class SlotState {
     private String merchIntentId;
     private String merchStrategy;
     private String merchNote;
+    private String merchHardExitAt;
 
     public static SlotState fromOfferEvent(OfferEvent offerEvent) {
         return new SlotState(
@@ -43,7 +44,8 @@ public class SlotState {
                 offerEvent.isBeforeLogin(),
                 offerEvent.getMerchIntentId(),
                 offerEvent.getMerchStrategy(),
-                offerEvent.getMerchNote()
+                offerEvent.getMerchNote(),
+                offerEvent.getMerchHardExitAt()
         );
     }
 

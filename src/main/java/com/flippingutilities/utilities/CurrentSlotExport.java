@@ -19,4 +19,5 @@ public class CurrentSlotExport {
     public final String merchIntentId;
     public final String merchStrategy;
     public final String merchNote;
+    public final String merchHardExitAt;
 }

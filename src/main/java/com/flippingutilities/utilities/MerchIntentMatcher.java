@@ -54,6 +54,7 @@ public class MerchIntentMatcher {
             offer.setMerchIntentId(text(matched, "intentId"));
             offer.setMerchStrategy(text(matched, "strategy"));
             offer.setMerchNote(text(matched, "note"));
+            offer.setMerchHardExitAt(text(matched, "hardExitAt"));
             Files.write(file.toPath(), keep, StandardCharsets.UTF_8);
         } catch (IOException | RuntimeException e) {
             log.warn("could not match merch intent", e);

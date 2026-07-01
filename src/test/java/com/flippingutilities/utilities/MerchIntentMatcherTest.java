@@ -21,7 +21,7 @@ public class MerchIntentMatcherTest {
         Path file = Files.createTempFile("merch-intents", ".jsonl");
         Files.write(file, (
                 "{\"intentId\":\"miss\",\"itemId\":2,\"side\":\"buy\",\"qty\":3,\"price\":100,\"strategy\":\"patient-band\",\"note\":\"wrong item\"}\n" +
-                "{\"intentId\":\"hit\",\"itemId\":1,\"side\":\"buy\",\"qty\":3,\"price\":100,\"strategy\":\"active-margin\",\"note\":\"matched\"}\n"
+                "{\"intentId\":\"hit\",\"itemId\":1,\"side\":\"buy\",\"qty\":3,\"price\":100,\"strategy\":\"active-margin\",\"note\":\"matched\",\"hardExitAt\":\"2026-06-27T13:30:00Z\"}\n"
         ).getBytes(StandardCharsets.UTF_8));
         OfferEvent offer = Utils.offer(
                 true,
@@ -39,6 +39,7 @@ public class MerchIntentMatcherTest {
         assertEquals("hit", offer.getMerchIntentId());
         assertEquals("active-margin", offer.getMerchStrategy());
         assertEquals("matched", offer.getMerchNote());
+        assertEquals("2026-06-27T13:30:00Z", offer.getMerchHardExitAt());
         String remaining = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
         assertFalse(remaining.contains("\"hit\""));
         assertTrue(remaining.contains("\"miss\""));
