@@ -7,44 +7,33 @@ old repo: https://github.com/Belieal/flipping-utilities
 
 # Merch harness integration
 
-This fork feeds the [07-mercher](https://github.com/sasoder/07-mercher) planning harness. The
-harness never plays the game; it reads the files this plugin writes and produces exact GE
-instructions. Two plugin features make that work:
+This fork adds two things for the [07-mercher](https://github.com/sasoder/07-mercher) planner,
+which reads this plugin's files and turns them into exact GE instructions:
 
-1. **Current GE slot export** — every login, logout, offer change, and (while logged in) a 10s
-   heartbeat writes `~/.runelite/flipping/current-slots/<rsn>.json` with each slot's item, side,
-   quantities, price, placement time, and merch intent tags.
-2. **Merch intent matching** — when you place an offer that exactly matches a pending intent in
-   `~/.runelite/flipping/merch-intents/<rsn>.jsonl` (item, side, quantity, price), the offer is
-   tagged with that intent's id/strategy/note/hard-exit and the intent line is consumed. Exact
-   match is deliberate: place the offer with precisely the planner's numbers.
+1. **Current GE slot export.** Writes `~/.runelite/flipping/current-slots/<rsn>.json` on login,
+   logout, and every offer change, plus every 10 seconds while logged in. Each slot's item, side,
+   quantities, price, placement time, and intent tags.
+2. **Intent matching.** The planner queues its suggestions in
+   `~/.runelite/flipping/merch-intents/<rsn>.jsonl`. When you place an offer whose item, side,
+   quantity, and price all match a pending line, the offer is tagged with that line's strategy
+   and the line is removed. A 1gp difference means no match, so use the planner's exact numbers.
 
 ## Setup
 
-Both of these settings live in the plugin config panel and must be enabled:
+In the plugin config panel, under Auto-Save:
 
-1. Enable **autosave** so trade history is written to `~/.runelite/flipping/<rsn>.json`, and set
-   the **auto save interval to 1 minute** (default is 10). The harness joins this file against the
-   slot export for offer identity and fill timing; a 10-minute-old autosave degrades that join:
-
-<p align="center">
-  <img src="images/merch-autosave.png" width="300">
-</p>
-
-<!-- TODO screenshot: plugin config panel, Auto save section, "Enable auto save" toggled ON -->
-
-2. Enable **Export current GE slots** (same Auto save section):
+1. Enable **auto-save** and set the **interval to 1 minute** (default is 10). The harness joins
+   the auto-save against the slot export for offer identity and fill timing, and a 10-minute-old
+   auto-save degrades that join.
+2. Enable **Export current GE slots**.
 
 <p align="center">
-  <img src="images/merch-slot-export.png" width="300">
+  <img src="images/merch-settings.png" width="300">
 </p>
 
-<!-- TODO screenshot: plugin config panel, Auto save section, "Export current GE slots" toggled ON -->
-
-No other configuration is needed — the export directory is fixed under `~/.runelite/flipping/`,
-and the harness's `scripts/runelite-sync.sh` pulls from there. Toggling "Export current GE slots"
-on forces an immediate write, which is also the quickest way to refresh a stale snapshot without
-relogging.
+That's it. The export directory is fixed under `~/.runelite/flipping/`, and the harness's
+`scripts/runelite-sync.sh` pulls from there. Toggling "Export current GE slots" off and on forces
+an immediate write, which is the quickest way to refresh a stale snapshot without relogging.
 
 ## Community
 Join the community on discord at https://discord.gg/GDqVgMH26s, it's one of the largest trading related communities
