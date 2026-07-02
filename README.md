@@ -5,10 +5,46 @@ optimal prices according to your margin checks with just a key press, and a lot 
 
 old repo: https://github.com/Belieal/flipping-utilities
 
-> **This fork** adds local-file integration for the
-> [07-mercher GE merchanting harness](https://github.com/sasoder/07-mercher): it exports current
-> GE slot state to disk and tags offers with the harness's intent labels. See
-> [Merch harness integration](#merch-harness-integration) for setup.
+# Merch harness integration
+
+This fork feeds the [07-mercher](https://github.com/sasoder/07-mercher) planning harness. The
+harness never plays the game; it reads the files this plugin writes and produces exact GE
+instructions. Two plugin features make that work:
+
+1. **Current GE slot export** — every login, logout, offer change, and (while logged in) a 10s
+   heartbeat writes `~/.runelite/flipping/current-slots/<rsn>.json` with each slot's item, side,
+   quantities, price, placement time, and merch intent tags.
+2. **Merch intent matching** — when you place an offer that exactly matches a pending intent in
+   `~/.runelite/flipping/merch-intents/<rsn>.jsonl` (item, side, quantity, price), the offer is
+   tagged with that intent's id/strategy/note/hard-exit and the intent line is consumed. Exact
+   match is deliberate: place the offer with precisely the planner's numbers.
+
+## Setup
+
+Both of these settings live in the plugin config panel and must be enabled:
+
+1. Enable **autosave** so trade history is written to `~/.runelite/flipping/<rsn>.json`, and set
+   the **auto save interval to 1 minute** (default is 10). The harness joins this file against the
+   slot export for offer identity and fill timing; a 10-minute-old autosave degrades that join:
+
+<p align="center">
+  <img src="images/merch-autosave.png" width="300">
+</p>
+
+<!-- TODO screenshot: plugin config panel, Auto save section, "Enable auto save" toggled ON -->
+
+2. Enable **Export current GE slots** (same Auto save section):
+
+<p align="center">
+  <img src="images/merch-slot-export.png" width="300">
+</p>
+
+<!-- TODO screenshot: plugin config panel, Auto save section, "Export current GE slots" toggled ON -->
+
+No other configuration is needed — the export directory is fixed under `~/.runelite/flipping/`,
+and the harness's `scripts/runelite-sync.sh` pulls from there. Toggling "Export current GE slots"
+on forces an immediate write, which is also the quickest way to refresh a stale snapshot without
+relogging.
 
 ## Community
 Join the community on discord at https://discord.gg/GDqVgMH26s, it's one of the largest trading related communities
@@ -18,6 +54,7 @@ Our discord also offers access to various powerful tools such as item dump alert
 deflated prices and a lot more!
 
 # Table of Contents
+- [Merch harness integration](#merch-harness-integration)
 - [Features](#features)
     + [The Flipping Tab](#the-flipping-tab)
     + [The Statistics Tab](#the-statistics-tab)
@@ -26,7 +63,6 @@ deflated prices and a lot more!
         - [Add untracked trades easily](#add-untracked-trades-easily)
         - [Setup offers quickly](#offer-editors)
         - [Favorites lookup](#favorites-lookup)
-- [Merch harness integration](#merch-harness-integration)
 - [Development](#development)
     + [General Structure of Codebase](#general-structure-of-codebase)
     + [Example Flow](#example-flow)
@@ -131,47 +167,6 @@ Quickly lookup your favorited items just by typing "1" in the ge search!
 <p align="center">
   <img src = "https://github.com/Flipping-Utilities/rl-plugin/blob/master/images/lookup.png">
 </p>
-
-# Merch harness integration
-
-This fork feeds the [07-mercher](https://github.com/sasoder/07-mercher) planning harness. The
-harness never plays the game; it reads the files this plugin writes and produces exact GE
-instructions. Two plugin features make that work:
-
-1. **Current GE slot export** — every login, logout, offer change, and (while logged in) a 10s
-   heartbeat writes `~/.runelite/flipping/current-slots/<rsn>.json` with each slot's item, side,
-   quantities, price, placement time, and merch intent tags.
-2. **Merch intent matching** — when you place an offer that exactly matches a pending intent in
-   `~/.runelite/flipping/merch-intents/<rsn>.jsonl` (item, side, quantity, price), the offer is
-   tagged with that intent's id/strategy/note/hard-exit and the intent line is consumed. Exact
-   match is deliberate: place the offer with precisely the planner's numbers.
-
-## Setup
-
-Both of these settings live in the plugin config panel and must be enabled:
-
-1. Enable **autosave** so trade history is written to `~/.runelite/flipping/<rsn>.json`, and set
-   the **auto save interval to 1 minute** (default is 10). The harness joins this file against the
-   slot export for offer identity and fill timing; a 10-minute-old autosave degrades that join:
-
-<p align="center">
-  <img src="images/merch-autosave.png" width="300">
-</p>
-
-<!-- TODO screenshot: plugin config panel, Auto save section, "Enable auto save" toggled ON -->
-
-2. Enable **Export current GE slots** (same Auto save section):
-
-<p align="center">
-  <img src="images/merch-slot-export.png" width="300">
-</p>
-
-<!-- TODO screenshot: plugin config panel, Auto save section, "Export current GE slots" toggled ON -->
-
-No other configuration is needed — the export directory is fixed under `~/.runelite/flipping/`,
-and the harness's `scripts/runelite-sync.sh` pulls from there. Toggling "Export current GE slots"
-on forces an immediate write, which is also the quickest way to refresh a stale snapshot without
-relogging.
 
 # Development
 
