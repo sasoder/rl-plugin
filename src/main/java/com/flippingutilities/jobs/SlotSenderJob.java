@@ -1,7 +1,6 @@
 package com.flippingutilities.jobs;
 
 import com.flippingutilities.controller.FlippingPlugin;
-import com.flippingutilities.model.AccountData;
 import com.flippingutilities.model.OfferEvent;
 import com.flippingutilities.ui.widgets.SlotActivityTimer;
 import com.flippingutilities.utilities.CurrentSlotsFileExporter;
@@ -59,7 +58,6 @@ public class SlotSenderJob {
         }
 
         List<SlotState> currentSlotStates = this.getCurrentSlots();
-        persistCurrentSlots(currentSlotStates);
         AccountSlotsUpdate accountSlotsUpdate = new AccountSlotsUpdate(plugin.getCurrentlyLoggedInAccount(), currentSlotStates);
         exportSlotsToFile(accountSlotsUpdate, true);
 
@@ -95,16 +93,8 @@ public class SlotSenderJob {
         }
 
         List<SlotState> currentSlotStates = this.getCurrentSlots();
-        persistCurrentSlots(currentSlotStates);
         AccountSlotsUpdate accountSlotsUpdate = new AccountSlotsUpdate(plugin.getCurrentlyLoggedInAccount(), currentSlotStates);
         exportSlotsToFile(accountSlotsUpdate, force);
-    }
-
-    private void persistCurrentSlots(List<SlotState> currentSlotStates) {
-        AccountData accountData = plugin.getDataHandler().getAccountData(plugin.getCurrentlyLoggedInAccount());
-        if (accountData != null) {
-            accountData.setCurrentSlots(currentSlotStates);
-        }
     }
 
     private void exportSlotsToFile(AccountSlotsUpdate accountSlotsUpdate, boolean force) {

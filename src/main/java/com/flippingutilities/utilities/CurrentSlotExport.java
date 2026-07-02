@@ -15,7 +15,6 @@ public class CurrentSlotExport {
     public final String lastFillTime;
     public final String offerCreationTime;
     public final Long ageSeconds;
-    public final Boolean beforeLogin;
     public final String merchIntentId;
     public final String merchStrategy;
     public final String merchNote;

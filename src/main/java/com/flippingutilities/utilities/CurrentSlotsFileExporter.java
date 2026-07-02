@@ -123,7 +123,6 @@ public class CurrentSlotsFileExporter {
                 lastFillTime,
                 offerCreationTime,
                 ageSeconds,
-                slot.getBeforeLogin() == null ? false : slot.getBeforeLogin(),
                 slot.getMerchIntentId(),
                 slot.getMerchStrategy(),
                 slot.getMerchNote(),

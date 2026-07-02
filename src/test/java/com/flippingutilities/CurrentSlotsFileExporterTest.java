@@ -36,7 +36,6 @@ public class CurrentSlotsFileExporterTest {
                 41324,
                 0,
                 Date.from(Instant.parse("2026-06-23T10:00:00Z")),
-                false,
                 "intent-1",
                 "active-margin",
                 "test note",

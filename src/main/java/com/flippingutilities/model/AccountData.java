@@ -28,7 +28,6 @@ package com.flippingutilities.model;
 
 import com.flippingutilities.controller.FlippingPlugin;
 import com.flippingutilities.ui.widgets.SlotActivityTimer;
-import com.flippingutilities.utilities.SlotState;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.game.ItemManager;
@@ -56,7 +55,6 @@ public class AccountData {
     private long accumulatedSessionTimeMillis = 0;
     private Instant lastSessionTimeUpdate;
     private List<SlotActivityTimer> slotTimers;
-    private List<SlotState> currentSlots = new ArrayList<>();
     private List<RecipeFlipGroup> recipeFlipGroups = new ArrayList<>();
     private Instant lastStoredAt = Instant.EPOCH;
     private Instant lastModifiedAt = Instant.now();

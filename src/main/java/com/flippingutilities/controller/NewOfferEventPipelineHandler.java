@@ -164,6 +164,7 @@ public class NewOfferEventPipelineHandler {
         newOfferEvent.setMerchIntentId(lastOfferEvent.getMerchIntentId());
         newOfferEvent.setMerchStrategy(lastOfferEvent.getMerchStrategy());
         newOfferEvent.setMerchNote(lastOfferEvent.getMerchNote());
+        newOfferEvent.setMerchHardExitAt(lastOfferEvent.getMerchHardExitAt());
         lastOfferEventForEachSlot.put(newOfferEvent.getSlot(), newOfferEvent);
         slotActivityTimers.get(newOfferEvent.getSlot()).setCurrentOffer(newOfferEvent);
         return newOfferEvent.getCurrentQuantityInTrade() ==0? Optional.empty() : Optional.of(newOfferEvent);
