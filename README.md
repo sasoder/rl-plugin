@@ -150,7 +150,9 @@ instructions. Two plugin features make that work:
 
 Both of these settings live in the plugin config panel and must be enabled:
 
-1. Enable **autosave** so trade history is written to `~/.runelite/flipping/<rsn>.json`:
+1. Enable **autosave** so trade history is written to `~/.runelite/flipping/<rsn>.json`, and set
+   the **auto save interval to 1 minute** (default is 10). The harness joins this file against the
+   slot export for offer identity and fill timing; a 10-minute-old autosave degrades that join:
 
 <p align="center">
   <img src="images/merch-autosave.png" width="300">
