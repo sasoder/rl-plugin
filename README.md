@@ -5,7 +5,7 @@ optimal prices according to your margin checks with just a key press, and a lot 
 
 old repo: https://github.com/Belieal/flipping-utilities
 
-> **This fork** (branch `codex/export-merch-intents`) adds local-file integration for the
+> **This fork** adds local-file integration for the
 > [07-mercher GE merchanting harness](https://github.com/sasoder/07-mercher): it exports current
 > GE slot state to disk and tags offers with the harness's intent labels. See
 > [Merch harness integration](#merch-harness-integration) for setup.
