@@ -7,7 +7,7 @@ old repo: https://github.com/Belieal/flipping-utilities
 
 # Merch harness integration
 
-This fork adds two things for the [Evidence-Based Flipping](https://github.com/sasoder/evidence-based-flipping) planner,
+This fork adds two things for the [Evidence-Based OSRS Flipper](https://github.com/sasoder/evidence-based-osrs-flipper) planner,
 which reads this plugin's files and turns them into exact GE instructions:
 
 1. **Current GE slot export.** Writes `~/.runelite/flipping/current-slots/<rsn>.json` on login,
