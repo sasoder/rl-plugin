@@ -5,7 +5,7 @@ optimal prices according to your margin checks with just a key press, and a lot 
 
 old repo: https://github.com/Belieal/flipping-utilities
 
-# Merch harness integration
+# Evidence-Based OSRS Flipper integration
 
 This fork adds two things for the [Evidence-Based OSRS Flipper](https://github.com/sasoder/evidence-based-osrs-flipper) planner,
 which reads this plugin's files and turns them into exact GE instructions:
@@ -43,7 +43,7 @@ Our discord also offers access to various powerful tools such as item dump alert
 deflated prices and a lot more!
 
 # Table of Contents
-- [Merch harness integration](#merch-harness-integration)
+- [Evidence-Based OSRS Flipper integration](#evidence-based-osrs-flipper-integration)
 - [Features](#features)
     + [The Flipping Tab](#the-flipping-tab)
     + [The Statistics Tab](#the-statistics-tab)
